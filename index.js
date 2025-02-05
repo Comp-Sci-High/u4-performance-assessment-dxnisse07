@@ -1,7 +1,8 @@
 const express= require('express');
 const app=express()
 
-const lifePosts = [
+const lifePosts = {
+  posts: [
     {
       age: 4,
       hobbies: ["walking", "Drawing"],
@@ -42,9 +43,28 @@ const lifePosts = [
       description: "Learning to read and playing soccer like a champ!",
       dateOfPhoto: "2024-05-05"
     },
-  ];
+  ]
+}
   
   
+app.set('view engine','ejs')
 
+app.use((req,res,next)=>{
+  console.log(req.method+ ""+req.path)
+  next()
+})
 
+app.use(express.static(__dirname+"/public"))
 
+app.get("/",(req,res)=>{
+  res.sendFile(__dirname + "/public/index.html")
+})
+
+app.get("/aboutMe",(req,res)=>{
+  const data= lifePosts[0];
+  res.render("aboutMe.ejs",lifePosts[0])
+});
+
+app.listen(3000, ()=>{
+ console.log("Server Running")
+})
